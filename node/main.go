@@ -20,7 +20,7 @@ func main() {
 
 	// ttl in seconds
 	ttl := 10
-	ttlS := fmt.Sprintf("$ds", ttl)
+	ttlS := fmt.Sprintf("%ds", ttl)
 	serviceKey := "service/distributed-logger/leader"
 	serviceName := "distributed-logger"
 
@@ -29,7 +29,7 @@ func main() {
 	config.Address = "consul:8500"
 	client, err := api.NewClient(config)
 	if err != nil {
-		log.Fatal("client err: %v", err)
+		log.Fatalf("client err: %v", err)
 	}
 
 	// create session
@@ -54,7 +54,7 @@ func main() {
 
 	log.Printf("Consul session : %+v\n", sID)
 
-	// Lock acquisition looop
+	// Lock acquisition loop
 	go func() {
 		hostName, err := os.Hostname()
 		if err != nil {
@@ -90,7 +90,7 @@ func main() {
 
 	<-sigCh
 	close(doneCh)
-	log.Printf("Destroying session and leaving...")
+	log.Printf("Destroying session and leaving ...")
 	_, err = client.Session().Destroy(sID, nil)
 	if err != nil {
 		log.Fatalf("session destroy err: %v", err)
